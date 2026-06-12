@@ -1,0 +1,590 @@
+{
+	"compiler": {
+		"version": "0.8.34+commit.80d5c536"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "string",
+						"name": "dataId",
+						"type": "string"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "deletedBy",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"name": "DataDeleted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "string",
+						"name": "dataId",
+						"type": "string"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "retrievedBy",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"name": "DataRetrieved",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "string",
+						"name": "dataId",
+						"type": "string"
+					},
+					{
+						"indexed": true,
+						"internalType": "string",
+						"name": "guestId",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint8",
+						"name": "dataType",
+						"type": "uint8"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "ipfsHash",
+						"type": "string"
+					}
+				],
+				"name": "DataStored",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "string",
+						"name": "dataId",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "newRetentionPeriod",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "updatedBy",
+						"type": "address"
+					}
+				],
+				"name": "RetentionUpdated",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "dataId",
+						"type": "string"
+					}
+				],
+				"name": "dataExists",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "exists",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "dataId",
+						"type": "string"
+					}
+				],
+				"name": "deleteData",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "success",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "dataId",
+						"type": "string"
+					}
+				],
+				"name": "getDataReference",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "ipfsHash",
+								"type": "string"
+							},
+							{
+								"internalType": "enum IDataStorage.DataType",
+								"name": "dataType",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint256",
+								"name": "uploadTimestamp",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "uploadedBy",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "size",
+								"type": "uint256"
+							},
+							{
+								"internalType": "string",
+								"name": "encryptionAlgorithm",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "encryptionKeyHash",
+								"type": "string"
+							}
+						],
+						"internalType": "struct IDataStorage.DataReference",
+						"name": "DataReference",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "dataId",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "guestId",
+								"type": "string"
+							},
+							{
+								"internalType": "enum IDataStorage.DataType",
+								"name": "dataType",
+								"type": "uint8"
+							},
+							{
+								"internalType": "bool",
+								"name": "isActive",
+								"type": "bool"
+							},
+							{
+								"internalType": "uint256",
+								"name": "retentionPeriod",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "expiryTimestamp",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct IDataStorage.DataMetadata",
+						"name": "metadata",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "guestId",
+						"type": "string"
+					},
+					{
+						"internalType": "enum IDataStorage.DataType",
+						"name": "dataType",
+						"type": "uint8"
+					}
+				],
+				"name": "getGuestDataByType",
+				"outputs": [
+					{
+						"internalType": "string[]",
+						"name": "dataIds",
+						"type": "string[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "guestId",
+						"type": "string"
+					}
+				],
+				"name": "getGuestDataReferences",
+				"outputs": [
+					{
+						"internalType": "string[]",
+						"name": "dataIds",
+						"type": "string[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "dataId",
+						"type": "string"
+					}
+				],
+				"name": "getIPFSHash",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "ipfsHash",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "dataId",
+						"type": "string"
+					}
+				],
+				"name": "isDataExpired",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "isExpired",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "guestId",
+						"type": "string"
+					},
+					{
+						"internalType": "enum IDataStorage.DataType",
+						"name": "dataType",
+						"type": "uint8"
+					},
+					{
+						"internalType": "string",
+						"name": "ipfsHash",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "size",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "encryptionAlgorithm",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "encryptionKeyHash",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "retentionPeriod",
+						"type": "uint256"
+					}
+				],
+				"name": "storeData",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "dataId",
+						"type": "string"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "dataId",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "newRetentionPeriod",
+						"type": "uint256"
+					}
+				],
+				"name": "updateRetention",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "success",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "dataId",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "expectedHash",
+						"type": "string"
+					}
+				],
+				"name": "verifyDataIntegrity",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "isValid",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "Interface for Data Storage Contract",
+			"events": {
+				"DataDeleted(string,address,uint256)": {
+					"details": "Event emitted when data is deleted",
+					"params": {
+						"dataId": "Unique data identifier",
+						"deletedBy": "Address that deleted the data",
+						"timestamp": "Deletion timestamp"
+					}
+				},
+				"DataRetrieved(string,address,uint256)": {
+					"details": "Event emitted when data is retrieved",
+					"params": {
+						"dataId": "Unique data identifier",
+						"retrievedBy": "Address that retrieved the data",
+						"timestamp": "Retrieval timestamp"
+					}
+				},
+				"DataStored(string,string,uint8,string)": {
+					"details": "Event emitted when data is stored",
+					"params": {
+						"dataId": "Unique data identifier",
+						"dataType": "Type of data stored",
+						"guestId": "Guest ID this data belongs to",
+						"ipfsHash": "IPFS hash of the data"
+					}
+				},
+				"RetentionUpdated(string,uint256,address)": {
+					"details": "Event emitted when data retention is updated",
+					"params": {
+						"dataId": "Unique data identifier",
+						"newRetentionPeriod": "New retention period in seconds",
+						"updatedBy": "Address that updated the retention"
+					}
+				}
+			},
+			"kind": "dev",
+			"methods": {
+				"dataExists(string)": {
+					"details": "Check if data exists",
+					"params": {
+						"dataId": "Unique data identifier"
+					},
+					"returns": {
+						"exists": "Whether data exists"
+					}
+				},
+				"deleteData(string)": {
+					"details": "Delete data reference and mark for cleanup",
+					"params": {
+						"dataId": "Unique data identifier"
+					},
+					"returns": {
+						"success": "Whether deletion was successful"
+					}
+				},
+				"getGuestDataByType(string,uint8)": {
+					"details": "Get data references by type for a guest",
+					"params": {
+						"dataType": "Type of data to filter by",
+						"guestId": "Guest ID to query"
+					},
+					"returns": {
+						"dataIds": "Array of data identifiers matching criteria"
+					}
+				},
+				"getGuestDataReferences(string)": {
+					"details": "Get all data references for a specific guest",
+					"params": {
+						"guestId": "Guest ID to query"
+					},
+					"returns": {
+						"dataIds": "Array of data identifiers"
+					}
+				},
+				"getIPFSHash(string)": {
+					"details": "Get the IPFS hash for a specific data ID",
+					"params": {
+						"dataId": "Unique data identifier"
+					},
+					"returns": {
+						"ipfsHash": "IPFS hash of the data"
+					}
+				},
+				"isDataExpired(string)": {
+					"details": "Check if data has expired and should be deleted",
+					"params": {
+						"dataId": "Unique data identifier"
+					},
+					"returns": {
+						"isExpired": "Whether data has expired"
+					}
+				},
+				"storeData(string,uint8,string,uint256,string,string,uint256)": {
+					"details": "Store data reference with IPFS hash",
+					"params": {
+						"dataType": "Type of data being stored",
+						"encryptionAlgorithm": "Encryption algorithm used",
+						"encryptionKeyHash": "Hash of the encryption key",
+						"guestId": "Guest ID this data belongs to",
+						"ipfsHash": "IPFS hash of the encrypted data",
+						"retentionPeriod": "How long data should be retained (seconds)",
+						"size": "Size of the data in bytes"
+					},
+					"returns": {
+						"dataId": "Unique data identifier"
+					}
+				},
+				"updateRetention(string,uint256)": {
+					"details": "Update retention period for data",
+					"params": {
+						"dataId": "Unique data identifier",
+						"newRetentionPeriod": "New retention period in seconds"
+					},
+					"returns": {
+						"success": "Whether update was successful"
+					}
+				},
+				"verifyDataIntegrity(string,string)": {
+					"details": "Verify data integrity by checking hash",
+					"params": {
+						"dataId": "Unique data identifier",
+						"expectedHash": "Expected IPFS hash"
+					},
+					"returns": {
+						"isValid": "Whether data integrity is valid"
+					}
+				}
+			},
+			"title": "IDataStorage",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"notice": "Manages secure storage of guest data using IPFS and on-chain hashes",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"hotel-police-system/interfaces/IDataStorage.sol": "IDataStorage"
+		},
+		"evmVersion": "osaka",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"hotel-police-system/interfaces/IDataStorage.sol": {
+			"keccak256": "0x6c3df162a046462917a1dbde0d274b7ff516f8273bd8ea242acbc7b54378451d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://36bb93bae2142aeb09d2b473d453dec719d54f13695ee0cf9e39f29fa13b384d",
+				"dweb:/ipfs/QmPWViUUB91q8ff3hbWWLw2s3AnKcdJF84iYA888vJFiqR"
+			]
+		}
+	},
+	"version": 1
+}
