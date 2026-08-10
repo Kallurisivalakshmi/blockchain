@@ -1,0 +1,22 @@
+# Crypto configuration for SecureChain prototype
+# This file defines the certificate authority structure for our network
+
+OrdererOrgs:
+  # Orderer organization definition
+  - Name: Orderer
+    Domain: securechain.com
+    Specs:
+      - Hostname: orderer
+
+PeerOrgs:
+  # HotelOrg organization definition
+  - Name: HotelOrg
+    Domain: hotelorg.securechain.com
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+      SANS:
+        - localhost
+        - 127.0.0.1
+    Users:
+      Count: 1

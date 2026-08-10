@@ -1,0 +1,83 @@
+# ConfigTX configuration for SecureChain prototype
+# This file defines the channel configuration and network structure
+
+Version: 1
+
+Organizations:
+  # Orderer organization
+  - &OrdererOrg
+    Name: OrdererMSP
+    ID: OrdererMSP
+    MSPDir: crypto-config/ordererOrganizations/securechain.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Writers:
+        Type: Signature
+        Rule: "OR('OrdererMSP.member')"
+      Admins:
+        Type: Signature
+        Rule: "OR('OrdererMSP.admin')"
+
+  # HotelOrg organization
+  - &HotelOrg
+    Name: HotelOrgMSP
+    ID: HotelOrgMSP
+    MSPDir: crypto-config/peerOrganizations/hotelorg.securechain.com/msp
+    Policies:
+      Readers:
+        Type: Signature
+        Rule: "OR('HotelOrgMSP.admin', 'HotelOrgMSP.peer', 'HotelOrgMSP.client')"
+      Writers:
+        Type: Signature
+        Rule: "OR('HotelOrgMSP.admin', 'HotelOrgMSP.client')"
+      Admins:
+        Type: Signature
+        Rule: "OR('HotelOrgMSP.admin')"
+    AnchorPeers:
+      - Port: 7051
+        Host: peer0.hotelorg.securechain.com
+
+Capabilities:
+  Channel: &ChannelCapabilities
+    V2_0: true
+  Orderer: &OrdererCapabilities
+    V2_0: true
+  Application: &ApplicationCapabilities
+    V2_0: true
+
+Application: &
+  Organizations:
+  - *HotelOrg
+  Capabilities: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+  OrdererType: solo
+  Addresses:
+    - orderer.securechain.com:7050
+  BatchTimeout: 2s
+  BatchSize:
+    MaxMessageCount: 10
+    AbsoluteMaxBytes: 99 MB
+    PreferredMaxBytes: 512 KB
+  Kafka:
+    Brokers:
+      - 127.0.0.1:9092
+  Organizations:
+  - *OrdererOrg
+  Capabilities: *OrdererCapabilities
+
+Profiles:
+  # Genesis block configuration
+  Genesis:
+    Orderer: *OrdererDefaults
+    Consortiums:
+      SecureChainConsortium:
+        Organizations:
+          - *HotelOrg
+
+  # Channel configuration
+  SecureChainChannel:
+    Consortium: SecureChainConsortium
+    Application: *
