@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const path = require('path');
 
 // Load environment variables
 dotenv.config();
@@ -21,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 // Database connection
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/backend', {
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/hotel_police_system', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
@@ -33,15 +34,34 @@ const connectDB = async () => {
 };
 
 // Routes
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/guests', require('./routes/guestRoutes'));
+app.use('/api/alerts', require('./routes/alertRoutes'));
+app.use('/api/watchlist', require('./routes/watchlistRoutes'));
+
+// Health check endpoint
 app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to Node.js + Express Backend' });
+  res.json({ message: 'Hotel Police Registry System API is running' });
+});
+
+// API info endpoint
+app.get('/api', (req, res) => {
+  res.json({
+    name: 'Hotel Police Registry System API',
+    version: '1.0.0',
+    endpoints: {
+      auth: '/api/auth',
+      guests: '/api/guests',
+      alerts: '/api/alerts',
+      watchlist: '/api/watchlist'
+    }
+  });
 });
 
 // Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
-});
+const { errorHandler, notFound } = require('./middleware/errorMiddleware');
+app.use(notFound);
+app.use(errorHandler);
 
 // Start server
 const startServer = async () => {

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity 0.8.20;
 
 /** 
  * @title Ballot
@@ -98,6 +98,18 @@ contract Ballot {
         // Forward the delegation as long as
         // 'to' also delegated.
         // In general, such loops are very dangerous,
+        while (voters[to].delegate != address(0)) {
+            to = voters[to].delegate;
+            require(to != msg.sender, "Found loop in delegation.");
+        }
+
+        Voter storage delegate_ = voters[to];
+        require(delegate_.weight != 0, "Delegate has no right to vote");
+
+        sender.voted = true;
+        sender.delegate = to;
+        delegate_.weight += sender.weight;
+    }
         // because if they run too long, they might
         // need more gas than is available in a block.
         // In this case, the delegation will not be executed,
